@@ -1,0 +1,52 @@
+version: '3.8'
+services:
+  web:
+    build: .
+    environment:
+      - EDITOR=vim
+      - WEBPACKER_DEV_SERVER_HOST=webpacker
+      - DB_HOST=nullab_db
+    command: bundle exec rails server -p 3000 -b '0.0.0.0'
+    volumes:
+      - .:/app
+      - gem-local:/usr/local/bundle
+      - node-local:/app/node_modules
+      - /app/tmp
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    stdin_open: true
+    tty: true
+
+  db:
+    image: mysql:8.0
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./docker/mysql/conf.d:/etc/mysql/conf.d
+      - mysql:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      TZ: "Asia/Tokyo"
+
+  webpacker:
+    build: .
+    command: ./bin/webpack-dev-server
+    ports:
+      - '3035:3035'
+    depends_on:
+      - web
+    volumes:
+      - .:/app
+      - node-local:/app/node_modules
+    environment:
+      - WEBPACKER_DEV_SERVER_HOST=0.0.0.0
+
+volumes:
+  mysql:
+  gem-local:
+    driver: "local"
+  node-local:
+    driver: "local"
