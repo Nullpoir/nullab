@@ -2,10 +2,7 @@ version: '3.8'
 services:
   web:
     build: .
-    environment:
-      - EDITOR=vim
-      - WEBPACKER_DEV_SERVER_HOST=webpacker
-      - DB_HOST=nullab_db
+    env_file: .env
     command: bundle exec rails server -p 3000 -b '0.0.0.0'
     volumes:
       - .:/app
@@ -20,16 +17,14 @@ services:
     tty: true
 
   db:
-    image: mysql:8.0
+    image: mysql:5.7
     ports:
-      - '3306:3306'
-    volumes:
-      - ./docker/mysql/conf.d:/etc/mysql/conf.d
-      - mysql:/var/lib/mysql
-    restart: always
+      - '${HOST_MYSQL_PORT:-3306}:3306'
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 1
-      TZ: "Asia/Tokyo"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    volumes:
+      - db-local:/var/lib/mysql
+    tty: true
 
   webpacker:
     build: .
@@ -45,7 +40,8 @@ services:
       - WEBPACKER_DEV_SERVER_HOST=0.0.0.0
 
 volumes:
-  mysql:
+  db-local:
+    driver: "local"
   gem-local:
     driver: "local"
   node-local:
