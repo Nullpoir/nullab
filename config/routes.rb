@@ -1,3 +1,9 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  mount_devise_token_auth_for 'Administrator', at: 'auth'
+
+  constraints Subdomain::Api do
+    namespace :api, path: Subdomain::Api.path do
+      mount_devise_token_auth_for 'Administrator', at: 'auth'
+    end
+  end
 end
