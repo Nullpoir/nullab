@@ -30,6 +30,7 @@ gem 'bootsnap', '>= 1.4.4', require: false
 gem 'active_model_serializers'
 gem 'active_hash'
 gem 'ransack'
+gem 'enumerize', '~> 2.3', '>= 2.3.1'
 gem 'devise'
 gem 'devise_token_auth'
 gem 'devise-i18n'
