@@ -13,5 +13,7 @@ Rails.application.routes.draw do
       delete '/admin/logout', to: 'admin/sessions#destroy'
       # post '/admin/refresh', to: 'admin/sessions#update'
     end
+
+    resources :posts, except: %i[create]
   end
 end

@@ -7,4 +7,6 @@ class Administrator < ActiveRecord::Base
          :recoverable, :rememberable, :validatable,
          :confirmable
   include DeviseTokenAuth::Concerns::User
+
+  has_many :post
 end

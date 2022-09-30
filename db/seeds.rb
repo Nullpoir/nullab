@@ -1,14 +1,21 @@
 email = 'admin@example.com'
 password = 'test-1234'
 
-resource = Administrator.new(
-            provider: 'email',
-            uid: email,
-            email: email,
-            password: password,
-            password_confirmation: password,
-            name: email,
-            allow_password_change: true,
-            confirmed_at: Time.zone.now
-          )
-resource.save!
+admin = Administrator.create!(
+  provider: 'email',
+  uid: email,
+  email: email,
+  password: password,
+  password_confirmation: password,
+  name: email,
+  allow_password_change: true,
+  confirmed_at: Time.zone.now
+)
+
+Post.create!(
+  title: 'タイトル',
+  content: '<h1>コンテンツ</h1>',
+  status: :published,
+  published_at: time.now,
+  author_id: admin.id
+)
